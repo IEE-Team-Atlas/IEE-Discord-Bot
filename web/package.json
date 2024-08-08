@@ -1,0 +1,39 @@
+{
+	"name": "web",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"lint": "prettier --check . && eslint .",
+		"format": "prettier --write ."
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^3.2.2",
+		"@sveltejs/adapter-node": "^5.2.0",
+		"@sveltejs/kit": "^2.5.20",
+		"@sveltejs/vite-plugin-svelte": "^3.1.1",
+		"@types/eslint": "^8.56.11",
+		"autoprefixer": "^10.4.20",
+		"eslint": "^9.8.0",
+		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-svelte": "^2.43.0",
+		"globals": "^15.9.0",
+		"postcss": "^8.4.41",
+		"prettier": "^3.3.3",
+		"prettier-plugin-svelte": "^3.2.6",
+		"svelte": "^4.2.18",
+		"sveltekit-flash-message": "^2.4.4",
+		"tailwindcss": "^3.4.9",
+		"vite": "^5.4.0"
+	},
+	"type": "module",
+	"dependencies": {
+		"axios": "^1.7.3",
+		"jsonwebtoken": "^9.0.2",
+		"mariadb": "^3.3.1",
+		"qs": "^6.13.0",
+		"svelte-french-toast": "^1.2.0"
+	}
+}

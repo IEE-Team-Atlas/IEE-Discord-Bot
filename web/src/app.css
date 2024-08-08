@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+    :root {
+        --color-background-base: #ffffff;
+        --color-text-base: #000000;
+        --color-text-hover: #5865F2;
+        --color-text-inverted: #ffffff;
+        --color-button-primary: #57F287;
+        --color-button-primary-hover: #57F287;
+        --color-button-secondary: #424549;
+        --color-button-secondary-hover: #424549;
+    }
+
+    .theme-dark {
+        --color-background-base: #282b30;
+        --color-background-accent: #1e2124;
+        --color-text-base: #ffffff;
+        --color-text-hover: #5865F2;
+        --color-text-inverted: #000000;
+        --color-button-primary: #57F287;
+        --color-button-primary-hover: #57F287;
+        --color-button-secondary: #424549;
+        --color-button-secondary-hover: #424549;
+    }
+}

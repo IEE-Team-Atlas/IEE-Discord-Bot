@@ -1,0 +1,64 @@
+services:
+
+  bot:
+    build: ./bot
+    container_name: discord_bot
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID}
+      DISCORD_TOKEN: ${DISCORD_TOKEN}
+      GUILD_ID: ${GUILD_ID}
+      ADMIN_CHANNEL_ID: ${ADMIN_CHANNEL_ID}
+      STUDENT_ROLE_ID: ${STUDENT_ROLE_ID}
+      PROFESSOR_ROLE_ID: ${PROFESSOR_ROLE_ID}
+      APPS_CLIENT_ID: ${APPS_CLIENT_ID}
+      APPS_SECRET: ${APPS_SECRET}
+      CALLBACK_URL: ${CALLBACK_URL}
+      DB_HOST: 'db'
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      JWT_SECRET: ${JWT_SECRET}
+
+
+
+  db:
+    image: mariadb:11.2.4
+    container_name: db
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: "toor"
+      MARIADB_USER: ${DB_USER}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+      MARIADB_DATABASE: ${DB_NAME}
+    volumes:
+      - ./db/setup.sql:/docker-entrypoint-initdb.d/setup.sql
+      - mariadb-data:/var/lib/mysql
+
+  web:
+    build: ./web
+    container_name: web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+     - db
+    environment:
+      PORT: '3000'
+      APPS_CLIENT_ID: ${APPS_CLIENT_ID}
+      APPS_SECRET: ${APPS_SECRET}
+      DISCORD_TOKEN: ${DISCORD_TOKEN}
+      GUILD_ID: ${GUILD_ID}
+      ADMIN_CHANNEL_ID: ${ADMIN_CHANNEL_ID}
+      STUDENT_ROLE_ID: ${STUDENT_ROLE_ID}
+      PROFESSOR_ROLE_ID: ${PROFESSOR_ROLE_ID}
+      DB_HOST: "db"
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      JWT_SECRET: ${JWT_SECRET}
+
+volumes:
+  mariadb-data:

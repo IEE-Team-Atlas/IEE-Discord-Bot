@@ -1,0 +1,18 @@
+{
+  "name": "iee_discord_bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/bot.js"
+  },
+  "author": "Thomas Soumpasis <thomasoumpasis@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "commandkit": "^0.1.10",
+    "discord.js": "^14.15.3",
+    "jsonwebtoken": "^9.0.2",
+    "mariadb": "^3.3.1"
+  }
+}

@@ -1,0 +1,21 @@
+[
+    {"name": "R1", "value": "[join](url-here)", "inline": true},
+    {"name": "R2", "value": "[join](url-here)", "inline": true},
+    {"name": "R3", "value": "[join](url-here)", "inline": true},
+    {"name": "R4", "value": "[join](url-here)", "inline": true},
+    {"name": "R5", "value": "[join](url-here)", "inline": true},
+    {"name": "R6", "value": "[join](url-here)", "inline": true},
+    {"name": "R7", "value": "[join](url-here)", "inline": true},
+    {"name": "R8", "value": "[join](url-here)", "inline": true},
+    {"name": "R9", "value": "[join](url-here)", "inline": true},
+    {"name": "\u200B","value": "\u200B" },
+    {"name": "E1", "value": "[join](url-here)", "inline": true},
+    {"name": "E2", "value": "[join](url-here)", "inline": true},
+    {"name": "E3", "value": "[join](url-here)", "inline": true},
+    {"name": "E4", "value": "[join](url-here)", "inline": true},
+    {"name": "E5", "value": "[join](url-here)", "inline": true},
+    {"name": "E6", "value": "[join](url-here)", "inline": true},
+    {"name": "E7", "value": "[join](url-here)", "inline": true},
+    {"name": "E8", "value": "[join](url-here)", "inline": true},
+    {"name": "E9", "value": "[join](url-here)", "inline": true}
+]
