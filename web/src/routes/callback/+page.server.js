@@ -73,8 +73,8 @@ async function handleNewUser(connection, user) {
         color: 0x3498DB,
         title: user.role === 'student' ? ':student: Νέος Φοιτητής Συνδέθηκε' : ':man_teacher: Νέος Καθηγητής Συνδέθηκε',
         description: user.role === 'student'
-            ? `Ο χρήστης <@${user.discord_id}> με έτος εισαγωγής ${user.regyear} συνδέθηκε επιτυχώς ως φοιτητής.`
-            : `Ο χρήστης <@${user.discord_id}> συνδέθηκε επιτυχώς ως καθηγητής.`,
+            ? `Ο χρήστης <@${user.discord_id}> με iee_id: #${user.iee_id} και έτος εισαγωγής: ${user.regyear} συνδέθηκε επιτυχώς ως φοιτητής.`
+            : `<@&${process.env.ADMIN_ROLE_ID}> <@&${process.env.MODERATOR_ROLE_ID}> Ο χρήστης <@${user.discord_id}> με iee_id: #${user.iee_id} συνδέθηκε επιτυχώς ως καθηγητής.`,
     };
 
     await retryOperation(() => notifyAdmins(process.env.ADMIN_CHANNEL_ID, adminMsg));
@@ -111,7 +111,7 @@ async function handleExistingUser(user, existingUser) {
         const adminMsg = {
             color: 0xED4245,
             title: ':warning: Προσπάθεια Αυθεντικοποίησης Δεύτερου Λογαριασμού',
-            description: `Ο χρήστης <@${user.discord_id}> προσπάθησε να συνδέσει τον λογαριασμό του στο Discord με έναν ιδρυματικό λογαριασμό που είναι ήδη συνδεδεμένος με τον χρήστη <@${existingUser.discord_id}>`
+            description: `<@&${process.env.ADMIN_ROLE_ID}> <@&${process.env.MODERATOR_ROLE_ID}> Ο χρήστης <@${user.discord_id}> προσπάθησε να συνδέσει τον λογαριασμό του στο Discord με τον ιδρυματικό λογαριασμό με iee_id: #${existingUser.iee_id} που είναι ήδη συνδεδεμένος με τον χρήστη <@${existingUser.discord_id}>`
         };
 
         await retryOperation(() => notifyAdmins(process.env.ADMIN_CHANNEL_ID, adminMsg));

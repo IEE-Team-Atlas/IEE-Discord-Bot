@@ -104,6 +104,11 @@ To run this project, you will need to create a ```.env``` file in the root direc
     # Discord Server ID
     GUILD_ID = "<YOUR_GUILD_ID>"
 
+    # Discord Server Admin and Moderator Role Id
+    ADMIN_ROLE_ID = "<YOUR_ADMIN_ROLE_ID>"
+    MODERATOR_ROLE_ID = "<YOUR_MODERATOR_ROLE_ID>"
+
+
     # Discord Server Admin Log Channel ID
     ADMIN_CHANNEL_ID = "<YOUR_ADMIN_LOG_CHANNEL_ID>"
 
