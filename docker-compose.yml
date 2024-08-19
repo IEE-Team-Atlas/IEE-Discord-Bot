@@ -7,20 +7,21 @@ services:
     depends_on:
       - db
     environment:
-      DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID}
-      DISCORD_TOKEN: ${DISCORD_TOKEN}
-      GUILD_ID: ${GUILD_ID}
-      ADMIN_CHANNEL_ID: ${ADMIN_CHANNEL_ID}
-      STUDENT_ROLE_ID: ${STUDENT_ROLE_ID}
-      PROFESSOR_ROLE_ID: ${PROFESSOR_ROLE_ID}
-      APPS_CLIENT_ID: ${APPS_CLIENT_ID}
-      APPS_SECRET: ${APPS_SECRET}
-      CALLBACK_URL: ${CALLBACK_URL}
-      DB_HOST: 'db'
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_NAME: ${DB_NAME}
-      JWT_SECRET: ${JWT_SECRET}
+      - DISCORD_CLIENT_ID
+      - DISCORD_TOKEN
+      - GUILD_ID
+      - ADMIN_ROLE_ID
+      - MODERATOR_ROLE_ID
+      - ADMIN_CHANNEL_ID
+      - STUDENT_ROLE_ID
+      - PROFESSOR_ROLE_ID
+      - APPS_CLIENT_ID
+      - APPS_SECRET
+      - CALLBACK_URL
+      - JWT_SECRET
+      - DB_USER
+      - DB_PASSWORD
+      - DB_NAME
 
 
 
@@ -46,19 +47,21 @@ services:
     depends_on:
      - db
     environment:
-      PORT: '3000'
-      APPS_CLIENT_ID: ${APPS_CLIENT_ID}
-      APPS_SECRET: ${APPS_SECRET}
-      DISCORD_TOKEN: ${DISCORD_TOKEN}
-      GUILD_ID: ${GUILD_ID}
-      ADMIN_CHANNEL_ID: ${ADMIN_CHANNEL_ID}
-      STUDENT_ROLE_ID: ${STUDENT_ROLE_ID}
-      PROFESSOR_ROLE_ID: ${PROFESSOR_ROLE_ID}
-      DB_HOST: "db"
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_NAME: ${DB_NAME}
-      JWT_SECRET: ${JWT_SECRET}
+      - DISCORD_CLIENT_ID
+      - DISCORD_TOKEN
+      - GUILD_ID
+      - ADMIN_ROLE_ID
+      - MODERATOR_ROLE_ID
+      - ADMIN_CHANNEL_ID
+      - STUDENT_ROLE_ID
+      - PROFESSOR_ROLE_ID
+      - APPS_CLIENT_ID
+      - APPS_SECRET
+      - CALLBACK_URL
+      - JWT_SECRET
+      - DB_USER
+      - DB_PASSWORD
+      - DB_NAME
 
 volumes:
   mariadb-data:

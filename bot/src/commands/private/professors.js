@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require("discord.js");
-const { EmbedBuilder } = require("@discordjs/builders");
+const { EmbedBuilder } = require("discord.js");
+const colors = require('../../lib/colors');
 
 let professors;
 try {
@@ -27,11 +28,11 @@ module.exports = {
 
         if (professors === null) {
             const errorEmbed = new EmbedBuilder()
-                .setColor(0xED4245)
+                .setColor(colors.red)
                 .setTitle('Σφάλμα')
                 .setDescription('Δεν μπορούμε να προσπελάσουμε τη λίστα με τους καθηγητές αυτή τη στιγμή.')
                 .setFooter({ text: 'Παρακαλώ δοκιμάστε ξανά αργότερα.' });
-            await interaction.reply({ embeds: [errorEmbed], ephemeral: isNotDM });
+            await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
             return;
         }
 
@@ -40,18 +41,17 @@ module.exports = {
 
         if (!targetProfessorObj) {
             const errorEmbed = new EmbedBuilder()
-                .setColor(0xED4245)
+                .setColor(colors.red)
                 .setTitle('Σφάλμα')
                 .setDescription(`Ο καθηγητής με το συγκεκριμένο όνομα δεν βρέθηκε.`)
                 .setFooter({text: 'Παρακαλώ ελέγξτε το όνομα και δοκιμάστε ξανά.'})
-            interaction.reply({embeds: [errorEmbed], ephemeral: isNotDM});
+            interaction.reply({embeds: [errorEmbed], ephemeral: true});
             return;
         }
 
         const professorEmbed = new EmbedBuilder()
-            .setColor(0x0099FF)
+            .setColor(colors.blue)
             .setTitle(':information_source: Πληροφορίες Επικοινωνίας Καθηγητή')
-            .setDescription(`Στοιχεία επικοινωνίας για τον καθηγητή: ${targetProfessorObj.name}`)
             .addFields(
                 { name: "Όνομα", value: `${targetProfessorObj.name}`},
                 { name: "Email", value: `${targetProfessorObj.email}`},
@@ -59,8 +59,7 @@ module.exports = {
                 { name: "Ώρες Γραφείου", value: `${targetProfessorObj.officeHours}` || "Δεν διατίθεται"},
                 { name: "Σημείωση", value: `${targetProfessorObj.note}` || "Δεν υπάρχει επιπλέον σημείωση."},
             )
-            .setFooter({text: 'Επικοινωνήστε με τον καθηγητή για περισσότερες λεπτομέρειες.'});
-
+            .setFooter({text: "Επικοινωνήστε με τον καθηγητή για περισσότερες λεπτομέρειες."});
 
         await interaction.reply({embeds: [professorEmbed],  ephemeral: isNotDM});
 
@@ -72,14 +71,17 @@ module.exports = {
         if (professors === null) return
 
         const filteredChoices = professors.filter((professor) => {
-            const [firstName, lastName] = professor.name.split(' ');
+            const nameParts = professor.name.split(' ');
 
-            return firstName.toLowerCase().startsWith(focusedProfessorOption.value.toLowerCase()) || lastName.toLowerCase().startsWith(focusedProfessorOption.value.toLowerCase())
+            return nameParts.some(part => 
+                part.toLowerCase().startsWith(focusedProfessorOption.value.toLowerCase())
+            );
+
         });
 
         const results = filteredChoices.map((p) => {
             return {
-                name: `${p.name}`,
+                name: p.name,
                 value: p.id,
             };
         });

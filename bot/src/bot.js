@@ -1,6 +1,5 @@
 const { Client, GatewayIntentBits } = require("discord.js");
 const { CommandKit } = require("commandkit");
-const mariadb = require('mariadb');
 const path = require("path");
 
 
@@ -18,6 +17,7 @@ new CommandKit({
     commandsPath: path.join(__dirname, 'commands'),
     eventsPath: path.join(__dirname, 'events'),
     validationsPath: path.join(__dirname, 'validations'),
+    devGuildIds: [process.env.GUILD_ID],
     bulkRegister: true,
 });
 

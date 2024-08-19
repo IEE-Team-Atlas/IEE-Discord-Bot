@@ -1,5 +1,6 @@
 const { EmbedBuilder } = require("discord.js");
-const pool = require("../../database");
+const pool = require("../../lib/database");
+const colors = require("../../lib/colors");
 
 
 module.exports = {
@@ -38,8 +39,6 @@ module.exports = {
             }
         })
         
-
-
         const userRegByYearQuery = 'SELECT registration_year, user_count FROM user_regyear_counts ORDER BY registration_year';
         const userRegByYearResults = await pool.query(userRegByYearQuery, interaction.user.id);
 
@@ -50,7 +49,7 @@ module.exports = {
 
 
         const statsEmbed = new EmbedBuilder()
-            .setColor('#0d86e3')
+            .setColor(colors.blue)
             .setTitle(':bar_chart: Bot Status Report')
             .setDescription(`**:hourglass: Διάρκεια Λειτουργίας ΒΟΤ:** \`${days}\` days, \`${hours}\` hours, \`${minutes}\` minutes and \`${seconds}\` seconds \n\n **:student: Συνολικός Αριθμός Εγγεγραμμένων Φοιτητών: ** \`${studentCount}\` \n **:man_teacher: Συνολικός Αριθμός Εγγεγραμμένων Καθηγητών: ** \`${staffCount}\` \n\n ${studentCount > 0 ? `**:calendar_spiral: Αριθμός Εγγραφών ανά Έτος:** \n ${yearly_registrations}`: ''}`)
 

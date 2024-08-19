@@ -1,5 +1,6 @@
 const { EmbedBuilder } = require("discord.js");
 const path = require("path");
+const colors = require('../../lib/colors');
 
 let zoomRooms;
 try {
@@ -21,16 +22,16 @@ module.exports = {
 
         if (zoomRooms === null) {
             const errorEmbed = new EmbedBuilder()
-                .setColor(0xED4245)
+                .setColor(colors.red)
                 .setTitle('Σφάλμα')
                 .setDescription('Δεν μπορούμε να προσπελάσουμε τη λίστα με τις αίθουσες Zoom αυτή τη στιγμή.')
                 .setFooter({ text: 'Παρακαλώ δοκιμάστε ξανά αργότερα.' });
-            await interaction.reply({ embeds: [errorEmbed], ephemeral: isNotDM });
+            await interaction.reply({ embeds: [errorEmbed], ephemeral: true });
             return;
         }
 
         const zoomEmbed = new EmbedBuilder()
-            .setColor('#0d86e3')
+            .setColor(colors.blue)
             .setTitle('Εικονικές αίθουσες του τμήματος ΜΠΗΣ.')
             .setDescription('Ακολουθούν οι σύνδεσμοι για όλες τις διαθέσιμες αίθουσες Zoom, του τμήματος Μηχανικών Πληροφορικής και Ηλεκτρονικών Συστημάτων. Κάντε κλικ στους συνδέσμους για να συνδεθείτε στις αίθουσες.')
             .setThumbnail(url = "attachment://zoom_logo.png")

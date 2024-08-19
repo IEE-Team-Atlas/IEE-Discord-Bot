@@ -1,7 +1,7 @@
 const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
-const path = require("path");
-const pool = require("../../database");
+const pool = require("../../lib/database");
 const jwt = require("jsonwebtoken");
+const colors = require('../../lib/colors');
 
 module.exports = {
     data: {
@@ -28,7 +28,7 @@ module.exports = {
                 const authURL = `https://login.iee.ihu.gr/authorization/?client_id=${process.env.APPS_CLIENT_ID}&response_type=code&state=${token}&scope=profile&redirect_uri=${process.env.CALLBACK_URL}`;
 
                 const authEmbed = new EmbedBuilder()
-                    .setColor('#0d86e3')
+                    .setColor(colors.blue)
                     .setTitle(':pencil: Σύνδεση λογαριασμού Discord με τον ιδρυματικό λογαριασμό.')
                     .setDescription(`Πατήστε το κουμπί παρακάτω για να συνδέσετε τον λογαριασμό σας στο Discord με τον ιδρυματικό σας λογαριασμό. Με αυτήν την ενέργεια θα αποκτήσετε πρόσβαση σε αποκλειστικά κανάλια και πληροφορίες που προορίζονται μόνο για τους φοιτητές του τμήματος μας.`)
                     .setFooter({ text: 'Επικοινωνήστε μαζί μας εάν αντιμετωπίσετε οποιοδήποτε πρόβλημα.' });
@@ -48,7 +48,7 @@ module.exports = {
 
             if (rows.length === 1) {
                 const  alreadyAuthedEmbed = new EmbedBuilder()
-                    .setColor('#00FF00')
+                    .setColor(colors.green)
                     .setTitle(':white_check_mark: Υπάρχων χρήστης')
                     .setDescription(`Είστε ήδη αυθεντικοποιημένοι. Αν πιστεύετε ότι αυτό είναι λάθος, παρακαλούμε επικοινωνήστε μαζί μας.`)
                     .setFooter({ text: 'Ευχαριστούμε για την κατανόηση.' });
