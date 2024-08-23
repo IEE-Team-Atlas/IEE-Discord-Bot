@@ -13,7 +13,7 @@ module.exports = {
 
         const isNotDM = interaction.guild === null ? false : true
 
-        const sqlQuery = 'SELECT id, user_role FROM users WHERE discord_id=?';
+        const sqlQuery = 'SELECT id, user_role, iee_id FROM users WHERE discord_id=?';
         const rows = await pool.query(sqlQuery, interaction.user.id)
 
         if (rows.length === 0) {
@@ -27,7 +27,7 @@ module.exports = {
         } else {
 
             const role = rows[0].user_role;
-            const iee_id = rows[0].user.iee_id;
+            const iee_id = rows[0].iee_id;
 
             const sqlQuery = `DELETE FROM users WHERE discord_id=?`;
             const result = await pool.query(sqlQuery, interaction.user.id);
