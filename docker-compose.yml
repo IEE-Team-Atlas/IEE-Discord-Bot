@@ -12,13 +12,16 @@ services:
       - GUILD_ID
       - ADMIN_ROLE_ID
       - MODERATOR_ROLE_ID
+      - GUEST_ROLE_ID
       - ADMIN_CHANNEL_ID
+      - GUEST_CHANNEL_ID
       - STUDENT_ROLE_ID
       - PROFESSOR_ROLE_ID
       - APPS_CLIENT_ID
       - APPS_SECRET
       - CALLBACK_URL
       - JWT_SECRET
+      - DB_HOST
       - DB_USER
       - DB_PASSWORD
       - DB_NAME
@@ -52,13 +55,16 @@ services:
       - GUILD_ID
       - ADMIN_ROLE_ID
       - MODERATOR_ROLE_ID
+      - GUEST_ROLE_ID
       - ADMIN_CHANNEL_ID
+      - GUEST_CHANNEL_ID
       - STUDENT_ROLE_ID
       - PROFESSOR_ROLE_ID
       - APPS_CLIENT_ID
       - APPS_SECRET
       - CALLBACK_URL
       - JWT_SECRET
+      - DB_HOST
       - DB_USER
       - DB_PASSWORD
       - DB_NAME

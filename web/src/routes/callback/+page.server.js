@@ -3,6 +3,7 @@ import qs from 'qs'
 import jwt from 'jsonwebtoken';
 import mariadb from 'mariadb';
 import { redirect } from 'sveltekit-flash-message/server';
+import colors from '../../lib/colors';
 
 const tokenURL = 'https://login.iee.ihu.gr/token'
 const apiURL = 'https://api.iee.ihu.gr/profile';
@@ -57,8 +58,17 @@ export async function load (event) {
     redirect(302, '/', redirectData, event);
 }
 
-
 async function handleNewUser(connection, user) {
+
+    // Check if user is in the guest list
+    const guestListResult = await pool.query('SELECT * FROM guests WHERE discord_id=?', user.discord_id);
+
+    if (guestListResult.length === 1) {
+        await retryOperation(() => deleteGuestLogMsg(process.env.GUEST_CHANNEL_ID, guestListResult[0].msg_id));
+        await retryOperation(() => removeRole(user.discord_id, process.env.GUEST_ROLE_ID));
+        await connection.query(`DELETE FROM guests WHERE discord_id=?`, user.discord_id);
+    }
+
     const sqlQuery = user.role === 'student'
         ? 'INSERT INTO `users` (`discord_id`, `user_role`, `iee_id`, `regyear`) VALUES (?, ?, ?, ?)'
         : 'INSERT INTO `users` (`discord_id`, `user_role`, `iee_id`) VALUES (?, ?, ?)';
@@ -70,7 +80,7 @@ async function handleNewUser(connection, user) {
     await retryOperation(() => connection.query(sqlQuery, queryParams));
 
     const adminMsg = {
-        color: 0x3498DB,
+        color: colors.blue,
         title: user.role === 'student' ? ':student: Νέος Φοιτητής Συνδέθηκε' : ':man_teacher: Νέος Καθηγητής Συνδέθηκε',
         description: user.role === 'student'
             ? `Ο χρήστης <@${user.discord_id}> με iee_id: #${user.iee_id} και έτος εισαγωγής: ${user.regyear} συνδέθηκε επιτυχώς ως φοιτητής.`
@@ -82,7 +92,7 @@ async function handleNewUser(connection, user) {
     await retryOperation(() =>  applyRole(user.discord_id, user.role));
 
     const userMsg = {
-        color: 0x57F287,
+        color: colors.green,
         title: ':white_check_mark: Ο λογαριασμός σας συνδέθηκε επιτυχώς',
         description: 'Ο λογαριασμός σας στο Discord συνδέθηκε επιτυχώς με τον ιδρυματικό σας λογαριασμό. Τώρα έχετε πρόσβαση στα αποκλειστικά κανάλια και τις πληροφορίες που προορίζονται για τους φοιτητές του τμήματος μας.',
         footer: { text: 'Επικοινωνήστε μαζί μας εάν αντιμετωπίσετε οποιοδήποτε πρόβλημα.' }
@@ -97,7 +107,7 @@ async function handleExistingUser(user, existingUser) {
 
     if (existingUser.discord_id.toString() === user.discord_id.toString()) {
         const msg = {
-            color: 0x57F287,
+            color: colors.green,
             title: ':white_check_mark: Ήδη Συνδεδεμένος Λογαριασμός',
             description: 'Ο λογαριασμός σας στο Discord είναι ήδη συνδεδεμένος με τον ιδρυματικό σας λογαριασμό. Δεν χρειάζεται να πραγματοποιήσετε ξανά την αυθεντικοποίηση.',
             footer: { text: 'Επικοινωνήστε μαζί μας εάν αντιμετωπίσετε οποιοδήποτε πρόβλημα.' }
@@ -109,7 +119,7 @@ async function handleExistingUser(user, existingUser) {
 
     } else {
         const adminMsg = {
-            color: 0xED4245,
+            color: colors.red,
             title: ':warning: Προσπάθεια Αυθεντικοποίησης Δεύτερου Λογαριασμού',
             description: `<@&${process.env.ADMIN_ROLE_ID}> <@&${process.env.MODERATOR_ROLE_ID}> Ο χρήστης <@${user.discord_id}> προσπάθησε να συνδέσει τον λογαριασμό του στο Discord με τον ιδρυματικό λογαριασμό με iee_id: #${existingUser.iee_id} που είναι ήδη συνδεδεμένος με τον χρήστη <@${existingUser.discord_id}>`
         };
@@ -117,7 +127,7 @@ async function handleExistingUser(user, existingUser) {
         await retryOperation(() => notifyAdmins(process.env.ADMIN_CHANNEL_ID, adminMsg));
 
         const userMsg = {
-            color: 0xED4245,
+            color: colors.red,
             title: ':exclamation: Ο Λογαριασμός Είναι Ήδη Συνδεδεμένος',
             description: `Ο ιδρυματικός λογαριασμός που προσπαθείτε να συνδέσετε είναι ήδη συνδεδεμένος με έναν άλλο λογαριασμό Discord.`,
             footer: { text: 'Αν πιστεύετε ότι αυτό είναι λάθος, παρακαλούμε επικοινωνήστε μαζί μας.' }
@@ -126,7 +136,7 @@ async function handleExistingUser(user, existingUser) {
         await retryOperation(() => sentDM(user.discord_id, userMsg));
 
         const orgUserMsg = {
-            color: 0xED4245,
+            color: colors.red,
             title: ':rotating_light: Σημαντική Ειδοποίηση Ασφαλείας',
             description: `Εντοπίστηκε προσπάθεια σύνδεσης χρησιμοποιώντας τα διαπιστευτήρια του ιδρυματικού σου λογαριασμού. \n\n **Αν ήσουν εσύ που προσπάθησες να συνδεθείς:** \n Λυπούμαστε, αλλά δεν είναι δυνατόν να συνδέσεις δύο διαφορετικούς λογαριασμούς. Θα χρειαστεί να αποσυνδεθείς από τον πρώτο λογαριασμό για να ολοκληρώσεις την σύνδεση με τον δεύτερο. \n\n **Αν δεν ήσουν εσύ που προσπάθησες να συνδεθείς:** \n Για την ασφάλεια του ιδρυματικού σου λογαριασμού, σου συνιστούμε να αλλάξεις άμεσα τον κωδικό πρόσβασης σου. \n\n :lock: [Αλλαγή Κωδικού Πρόσβασης](https://apps.iee.ihu.gr/user)`,
             footer: { text: 'Επικοινωνήστε μαζί μας εάν αντιμετωπίσετε οποιοδήποτε πρόβλημα.' }
@@ -183,6 +193,25 @@ async function applyRole(discord_id, role) {
     }
 }
 
+async function removeRole(discord_id, role) {
+    const roleId = role === 'student' ? process.env.STUDENT_ROLE_ID : process.env.PROFESSOR_ROLE_ID;
+
+    try {
+        const response = await fetch(`https://discord.com/api/v10/guilds/${process.env.GUILD_ID}/members/${discord_id}/roles/${roleId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bot ${process.env.DISCORD_TOKEN}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error removing role from user: ${response.statusText}`);
+        }
+    } catch (err) {
+        console.error(`Error removing role from user: ${err}`);
+    }
+}
+
 async function notifyAdmins(channelId, msg) {
     try {
         const response = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
@@ -200,6 +229,25 @@ async function notifyAdmins(channelId, msg) {
     } catch (err) {
         console.error(`Error notifying admins: ${err}`);
     }
+}
+
+async function deleteGuestLogMsg(channelId, msgId) {
+    try {
+        const response = await fetch(`https://discord.com/api/v10/channels/${channelId}/messages/${msgId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bot ${process.env.DISCORD_TOKEN}`,
+                'Content-Type': 'application/json'
+            }
+        })
+
+        if (!response.ok) {
+            throw new Error(`Error deleting guest list log message: ${response.statusText}`)
+        }
+    } catch (err) {
+        console.error(`Error deleting guest list log message: ${err}`)
+    }
+
 }
 
 async function getToken(code) {

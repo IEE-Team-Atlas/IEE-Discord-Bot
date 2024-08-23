@@ -8,6 +8,12 @@ CREATE TABLE IF NOT EXISTS users (
 	PRIMARY KEY (`id`)
 );
 
+CREATE TABLE IF NOT EXISTS guests (
+    discord_id VARCHAR(28) NOT NULL,
+    reason TEXT,
+    given_by VARCHAR(28),
+    msg_id VARCHAR(128)
+);
 
 -- Create the user_regyear_counts table
 CREATE TABLE IF NOT EXISTS user_regyear_counts (
