@@ -1,9 +1,9 @@
 const colors = {
-    blue: '#0d86e3',
-    green: '#57F287',
-    yello: '#FEE75C',
-    orange: '#e67e22',
-    red: '#ED4245'
+    blue: 0x0D86E3,
+    green: 0x57F287,
+    yellow: 0xFEE75C,
+    orange: 0xE67E22,
+    red: 0xED4245
 }
 
-module.exports = colors;
+export default colors;
